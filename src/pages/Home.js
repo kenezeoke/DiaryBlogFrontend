@@ -1,23 +1,26 @@
-import {useState, useEffect} from "react"
+import {/*useState */ useEffect} from "react"
 import TaskHead from "../components/TaskHead.js"
 import styles from "../styles/styles.module.scss"
 import TaskForm from "../components/TaskForm.js"
+import {useTasksContext} from "../hooks/useTasksContext.js"
 
 
 const Home = () => {
-    const [tasks, setTasks] = useState(null)
+    const {tasks, dispatch} = useTasksContext()
+    //const [tasks, setTasks] = useState(null)
 
     useEffect( ()=>{
         const fetchTasks = async() =>{
                 const response = await fetch("http://localhost:3050/api/v1/posts/")
                 const json = await response.json()
-                response.ok ? setTasks(json): console.log("error")
+                if (response.ok) dispatch({type: 'SET_TASKS', payload:json});
+               // response.ok ? setTasks(json): console.log("error")
         
             
         }
 
         fetchTasks()
-    },[])
+    },[dispatch])
 
 
 

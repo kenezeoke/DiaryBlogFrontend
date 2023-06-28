@@ -8,13 +8,13 @@ export const taskReducer = (state, action) =>{
             return {
                 tasks: action.payload
             }
-        case "CREATE_POST":
+        case "CREATE_TASK":
             return {
                 tasks: [action.payload, ...state.tasks]
             }
         case "DELETE_TASK":
             return {
-                tasks: state.posts.filter(post => post._id != action.payload._id)
+                tasks: state.tasks.filter(task => task._id !== action.payload._id)
 
             }
         default:
@@ -22,6 +22,14 @@ export const taskReducer = (state, action) =>{
     }
 }
 
-export const PostsContextProvider = ({children}) => {
-    const [state,dispatcher] = useReducer(taskReducer)
+export const TasksContextProvider = ({children}) => {
+    const [state,dispatch] = useReducer(taskReducer,{
+        tasks: null
+    })
+
+    return (
+        <TasksContext.Provider value = {{...state, dispatch}}>
+            {children}
+        </TasksContext.Provider>
+    )
 }

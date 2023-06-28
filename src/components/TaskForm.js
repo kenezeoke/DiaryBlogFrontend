@@ -1,12 +1,13 @@
 import {useForm} from 'react-hook-form'
 import styles from "../styles/styles.module.scss"
+import {useTasksContext} from "../hooks/useTasksContext"
 
 const TaskForm = () =>{
     const { register, handleSubmit, setError, reset, formState: {errors}} =useForm();
-
+    const {dispatch} = useTasksContext()
     const onSubmit = async data =>{
         const task = {
-            data: data.date,
+            date: data.date,
             title: data.title,
             content: data.content
         }
@@ -27,6 +28,7 @@ const TaskForm = () =>{
 
             if(response.ok) {
                 reset({title: "", date:"", content:""})
+                dispatch({ type: 'CREATE_TASK', payload: newTask })
                 console.log("new Task created", newTask)
             }
         
@@ -45,7 +47,7 @@ const TaskForm = () =>{
                 <input type="date" {...register("date")} placeholder = "enter date"/>
                 <textarea rows="25" className={styles.content} {...register("content", {required: "required field"})} placeholder = "enter diary blog content"/>
                 <p>{errors.content?.message}</p>
-                <button type="submit" value="submit"> Post</button>
+                <button type="submit" value="submit"> Create Post</button>
             </form>
         
         
