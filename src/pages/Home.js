@@ -26,7 +26,7 @@ const Home = () => {
             <div>
                 <h1> Posts </h1>
 
-                <ul className={styles.PostList}>
+                <ul className={styles.postList}>
                     {tasks && tasks.map(task =>(
                         <TaskHead key={task._id} task={task}/>
                     ))}
