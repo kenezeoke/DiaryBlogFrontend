@@ -1,10 +1,12 @@
 import {useForm} from 'react-hook-form'
 import styles from "../styles/styles.module.scss"
 import {useTasksContext} from "../hooks/useTasksContext"
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const TaskForm = () =>{
     const { register, handleSubmit, setError, reset, formState: {errors}} =useForm();
     const {dispatch} = useTasksContext()
+    const {user} = useAuthContext()
     const onSubmit = async data =>{
         const task = {
             date: data.date,
@@ -13,11 +15,12 @@ const TaskForm = () =>{
         }
 
         try{
-            const response = await fetch("http://localhost:3050/api/v1/posts", {
+            const response = await fetch("http://localhost:3060/api/v1/posts", {
                 method: "POST",
                 body: JSON.stringify(task),
                 headers:{
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${user.token}`
                 }
             })
 

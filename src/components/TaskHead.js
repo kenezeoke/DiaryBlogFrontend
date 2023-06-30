@@ -1,12 +1,20 @@
 import styles from "../styles/styles.module.scss"
 import {Link} from "react-router-dom"
 import {useTasksContext} from "../hooks/useTasksContext.js"
+import { useAuthContext } from "../hooks/useAuthContext"
+import {format} from "date-fns"
+
 const TaskHead =({task})=>{
     const {dispatch} = useTasksContext();
+    const {user} = useAuthContext();
+
     //to hand deletion from db
     const handleClick  = async() =>{
-        const response = await fetch(`http://localhost:3050/api/v1/posts/${task._id}`, {
-            method: 'DELETE'
+        const response = await fetch(`http://localhost:3060/api/v1/posts/${task._id}`, {
+            method: 'DELETE',
+            headers: {
+                "authorization": `Bearer ${user.token}`
+            }
         })
         
         const body = await response.text()
@@ -29,7 +37,7 @@ const TaskHead =({task})=>{
                     delete
                 </span>
             </span>
-            <div> {task.date} </div>
+            <div> {format(new Date(task.date), "MMMM d, y")} </div>
             <p> {task.content.substring(0,200) + "..." }</p>
         </li>
     )
